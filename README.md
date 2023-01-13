@@ -1,3 +1,10 @@
+## Features
+
+- CRUD products
+- Login/signup
+- Add reviews
+- Product Slug
+- Swagger for product List
 ## Install
 
 ### Clone the repository
@@ -55,4 +62,8 @@ rails rswag
 ```
 
 ![Screenshot from 2023-01-13 21-07-31](https://user-images.githubusercontent.com/16288470/212359023-c400e515-eb36-473d-9ce2-ea9befe69229.png)
+
+
+
+https://user-images.githubusercontent.com/16288470/212362379-364b2b43-f824-4a43-8495-f3708f753e0d.mp4
 
