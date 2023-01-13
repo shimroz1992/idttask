@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="row">
+    <div class="col-6 mx-auto text-center">
+      <h2>Log in</h2>
+    </div>
+  </div>
+
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+  <div class="">
+   <div class="form-field p-3 mt-0 col-6 mx-auto">
+    <%= f.label :email,class:"" %>
+    <%= f.email_field :email, autofocus: true, autocomplete: "email",class:"form-control",placeholder:"name@example.com" %> 
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <div class="field p-3 mt-0 form-group col-6 mx-auto">
+        <%= f.label :password %><br />
+        <%= f.password_field :password, autocomplete: "current-password",class:"form-control",placeholder:"Enter Password" %>
+      </div>
+    </div>
+  </div>
+
+  <% if devise_mapping.rememberable? %>
+  <div class="field p-3 mt-0  form-group col-6 mx-auto">
+    <%= f.check_box :remember_me %>
+    <%= f.label :remember_me %>
+  </div>
+  <% end %>
+
+  <div class="actions mt-3 d-grid  col-6 mx-auto">
+    <%= f.submit "Log in" ,class: "btn btn-primary"%>
+  </div>
+  <div class="p-3 mt-3 hstack gap-2 col-6 mx-auto ">
+   <%= render "devise/shared/links" %>
+ </div>
+</div>
+<% end %>
+
+
+</div>
+</div>

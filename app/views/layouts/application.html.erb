@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SampleApp</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+</head>
+
+<body style="">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="navbar-brand"> 
+      <%= link_to "Products", root_path,class: "navbar-brand",style:"color:blue ;font-size:30px;font-weight: bold;font-style: serif;"%>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto  topnav">
+        
+        <% if user_signed_in? %>  
+        <li class="nav-item" style="font-style: serif;font-size: 25px;margin-left: 60px;">
+          Welcome!
+          <small class="text-muted"><%= current_user.email %> </small>
+        </li>  
+        <li class="nav-item" style="margin-left: 500px;">
+         <% if user_signed_in? %>
+         <%= link_to 'Add Product', new_product_path,class: "btn btn-primary position-relative " %>
+         <% end %>
+       </li>
+       <li class="nav-item" style="margin-left: 10px;">
+        <%= link_to "Sign Out", destroy_user_session_path, :method => :delete,class: " btn btn-primary text-white" %> 
+
+
+        <% else %>
+        <%= link_to "Sign in", user_session_path, class: " btn btn-primary text-white" %> 
+        <% end %>
+      </li>    
+      
+    </ul>
+
+  </div>
+</nav>
+<% if notice %>
+<p class="alert alert-success"><%= notice %></p>
+<% end %>
+<% if alert %>
+<p class="alert alert-danger"><%= alert %></p>
+<% end %>
+
+
+<%= yield %>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<div class="container ">
+  <style type="text/css">
+    .spacing{
+      float: left;
+      position: relative;
+      padding-right: 30px;
+    }
+    .glyphicon{
+      color: #ffce6a;
+    }
+  </style>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <dl>
+    <div>
+     <div class="shadow p-3 bg-body rounded">
+       <img class="card-img-top " src="<%=@product.image_url%>" alt="Card image cap ">
+       <h4 class=" p-3 mt-0 col-6 mx-auto">
+        <dt >Name:</dt>
+        <dd><%= @product.name %></dd>
+      </h4>
+      <h4 class=" p-3 mt-0 col-6 mx-auto">
+        <dt>Description:</dt>
+        <dd><%= @product.description %></dd>
+      </h4>
+    </div>
+
+    <h3>Reviews</h3>
+    <% @product.reviews.each do |review| %>
+    <div class="shadow p-3 bg-body rounded">
+      <p>
+
+        <strong class="" >Name :  </strong><%= review.name %>
+        <div class=""><%= rating_for review, 'quality', disable_after_rate: true %></div>
+        <strong>comment :   </strong>
+        <%= review.description %>
+      </p>  
+
+    </div>
+    <% end %>
+  </div>
+  <div class="container ">
+    <% if user_signed_in? %>
+    <% unless @product.reviews.find_by(user_id: current_user).present? %>
+    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add review</button>
+    <%end%>
+    <%end%>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">New Review</h4>
+          </div>
+          <div class="modal-body">
+            <h2>Add a review:</h2>
+
+            <%= form_with model: [ @product, @product.reviews.build ] do |form| %>
+            <p>
+              <%= form.label :name %><br>
+              <%= form.text_field :name %>
+            </p>
+            <input type="number" class="rating" id="test" name="test" data-min="1" data-max="5" value="0">
+            <p>
+              <%= form.label :description %><br>
+              <%= form.text_area :description %>
+            </p>
+            <p>
+              <%= form.submit %>
+            </p>
+            <% end %>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</dl>
+<div>
+  <% if user_signed_in? %>
+  <%= link_to 'Edit', edit_product_path(@product) %>
+  <% end %> |
+  <%= link_to 'Back', products_path %>
+</div>
+<script type="text/javascript">
+  (function ($) {
+
+    $.fn.rating = function () {
+
+      var element;
+
+    // A private function to highlight a star corresponding to a given value
+      function _paintValue(ratingInput, value) {
+        var selectedStar = $(ratingInput).find('[data-value=' + value + ']');
+        selectedStar.removeClass('glyphicon-star-empty').addClass('glyphicon-star');
+        selectedStar.prevAll('[data-value]').removeClass('glyphicon-star-empty').addClass('glyphicon-star');
+        selectedStar.nextAll('[data-value]').removeClass('glyphicon-star').addClass('glyphicon-star-empty');
+      }
+
+    // A private function to remove the selected rating
+      function _clearValue(ratingInput) {
+        var self = $(ratingInput);
+        self.find('[data-value]').removeClass('glyphicon-star').addClass('glyphicon-star-empty');
+        self.find('.rating-clear').hide();
+        self.find('input').val('').trigger('change');
+      }
+
+    // Iterate and transform all selected inputs
+      for (element = this.length - 1; element >= 0; element--) {
+
+        var el, i, ratingInputs,
+        originalInput = $(this[element]),
+        max = originalInput.data('max') || 5,
+        min = originalInput.data('min') || 0,
+        clearable = originalInput.data('clearable') || null,
+        stars = '';
+
+      // HTML element construction
+        for (i = min; i <= max; i++) {
+        // Create <max> empty stars
+          stars += ['<span class="glyphicon glyphicon-star-empty" data-value="', i, '"></span>'].join('');
+        }
+      // Add a clear link if clearable option is set
+        if (clearable) {
+          stars += [
+            ' <a class="rating-clear" style="display:none;" href="javascript:void">',
+            '<span class="glyphicon glyphicon-remove"></span> ',
+            clearable,
+            '</a>'].join('');
+        }
+
+        el = [
+        // Rating widget is wrapped inside a div
+          '<div class="rating-input">',
+          stars,
+        // Value will be hold in a hidden input with same name and id than original input so the form will still work
+          '<input type="hidden" name="',
+          originalInput.attr('name'),
+          '" value="',
+          originalInput.val(),
+          '" id="',
+          originalInput.attr('id'),
+          '" />',
+          '</div>'].join('');
+
+      // Replace original inputs HTML with the new one
+        originalInput.replaceWith(el);
+
+      }
+
+    // Give live to the newly generated widgets
+      $('.rating-input')
+      // Highlight stars on hovering
+      .on('mouseenter', '[data-value]', function () {
+        var self = $(this);
+        _paintValue(self.closest('.rating-input'), self.data('value'));
+      })
+      // View current value while mouse is out
+      .on('mouseleave', '[data-value]', function () {
+        var self = $(this);
+        var val = self.siblings('input').val();
+        if (val) {
+          _paintValue(self.closest('.rating-input'), val);
+        } else {
+          _clearValue(self.closest('.rating-input'));
+        }
+      })
+      // Set the selected value to the hidden field
+      .on('click', '[data-value]', function (e) {
+        var self = $(this);
+        var val = self.data('value');
+        self.siblings('input').val(val).trigger('change');
+        self.siblings('.rating-clear').show();
+        e.preventDefault();
+        false
+      })
+      // Remove value on clear
+      .on('click', '.rating-clear', function (e) {
+        _clearValue($(this).closest('.rating-input'));
+        e.preventDefault();
+        false
+      })
+      // Initialize view with default value
+      .each(function () {
+        var val = $(this).find('input').val();
+        if (val) {
+          _paintValue(this, val);
+          $(this).find('.rating-clear').show();
+        }
+      });
+
+    };
+
+  // Auto apply conversion of number fields with class 'rating' into rating-fields
+    $(function () {
+      if ($('input.rating[type=number]').length > 0) {
+        $('input.rating[type=number]').rating();
+      }
+    });
+
+  }(jQuery));
+</script>
+</div>

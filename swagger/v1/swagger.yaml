@@ -1,0 +1,49 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/api/v1/product/index":
+    get:
+      summary: list products
+      tags:
+      - Products
+      responses:
+        '200':
+          description: successful
+  "/api/v1/product/add_review":
+    post:
+      summary: add review product
+      tags:
+      - Products
+      parameters:
+      - name: id
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                user_id:
+                  type: string
+                name:
+                  type: string
+              required:
+              - description
+              - user_id
+              - name
+servers:
+- url: http://{defaultHost}
+  variables:
+    defaultHost:
+      default: localhost:3000

@@ -1,0 +1,34 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h2>Forgot your password?</h2>
+    </div>
+  </div>
+
+  <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+  <div class="row">
+   <div class="col p-3 mt-3">
+    <%= render "devise/shared/error_messages", resource: resource,class:"alert alert-danger" %>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <div class="field form-group">
+      <%= f.label :email %><br />
+      <%= f.email_field :email, autofocus: true, autocomplete: "email",class:"form-control " %>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col p-3 mt-3">
+    <div class="actions form-group">
+      <%= f.submit "Send me reset password instructions" ,class: "btn btn-primary"%>
+    </div>
+  </div>
+</div>
+<% end %>
+<div class="hstack gap-2">
+  <%= render "devise/shared/links" %>
+</div>
+</div>
